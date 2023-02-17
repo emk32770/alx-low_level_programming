@@ -1,1 +1,1 @@
-# Singly LinkedList in C
+0x12. C - Singly linked lists task

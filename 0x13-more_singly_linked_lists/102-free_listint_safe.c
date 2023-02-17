@@ -1,37 +1,72 @@
 #include "lists.h"
-#include <stdio.h>
 
 /**
- * free_listint_safe - Frees a linked list containing integers
- * @h: Address of the first item in the list
+ * free_listp2 - frees a linked list
+ * @head: head of a list.
  *
- * Return: Length of the freed list
+ * Return: no return.
+ */
+void free_listp2(listp_t **head)
+{
+	listp_t *temp;
+	listp_t *curr;
+
+	if (head != NULL)
+	{
+		curr = *head;
+		while ((temp = curr) != NULL)
+		{
+			curr = curr->next;
+			free(temp);
+		}
+		*head = NULL;
+	}
+}
+
+/**
+ * free_listint_safe - frees a linked list.
+ * @h: head of a list.
+ *
+ * Return: size of the list that was freed.
  */
 size_t free_listint_safe(listint_t **h)
 {
-	listint_t *node = *h, *next;
-	size_t len = 0;
+	size_t nnodes = 0;
+	listp_t *hptr, *new, *add;
+	listint_t *curr;
 
-	if (!h || !*h)
-		return (0);
-
-	while (node)
+	hptr = NULL;
+	while (*h != NULL)
 	{
-		next = node->next;
+		new = malloc(sizeof(listp_t));
 
-		free(node);
-		len++;
+		if (new == NULL)
+			exit(98);
 
-		if ((void *)node <= (void *)next)
+		new->p = (void *)*h;
+		new->next = hptr;
+		hptr = new;
+
+		add = hptr;
+
+		while (add->next != NULL)
 		{
-			*h = NULL;
-			break;
+			add = add->next;
+			if (*h == add->p)
+			{
+				*h = NULL;
+				free_listp2(&hptr);
+				return (nnodes);
+			}
 		}
 
-		node = next;
+		curr = *h;
+		*h = (*h)->next;
+		free(curr);
+		nnodes++;
 	}
 
 	*h = NULL;
-
-	return (len);
+	free_listp2(&hptr);
+	return (nnodes);
 }
