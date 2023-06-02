@@ -1,0 +1,6 @@
+##Complier to use 
+CC=gcc
+SRC=main.c school.c
+#Make file
+all: $(SRC) 
+	$(CC) $(SRC) -o school
